@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대시보드 - Smart Eye Health</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Sidebar Navigation (Desktop) -->
+  <nav class="sidebar-nav">
+    <div style="margin-bottom: 32px; padding: 12px;">
+      <h2 style="font-size: 20px; font-weight: bold; color: #1D4ED8;">Smart Eye Health</h2>
+    </div>
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item active">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">스마트렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-button" onclick="history.back()">←</button>
+      <h1 class="header-title">데일리 리포트</h1>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="card stat-card">
+        <div class="stat-label">평균 피로도</div>
+        <div class="stat-value" style="color: #F59E0B;" id="avgFatigue">75%</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">최대 안압</div>
+        <div class="stat-value" id="maxPressure">18 mmHg</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">평균 깜빡임</div>
+        <div class="stat-value" id="avgBlink">15 회/분</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">경보 횟수</div>
+        <div class="stat-value" style="color: #EF4444;" id="alertCount">0 회</div>
+      </div>
+    </div>
+
+    <!-- 주간 트렌드 -->
+    <div class="section">
+      <div class="section-title">주간 트렌드</div>
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <button class="btn btn-primary" style="padding: 8px 16px; border-radius: 20px; font-size: 13px;">피로도</button>
+        <button class="btn btn-secondary" style="padding: 8px 16px; border-radius: 20px; font-size: 13px;">경보 횟수</button>
+        <button class="btn btn-secondary" style="padding: 8px 16px; border-radius: 20px; font-size: 13px;">깜빡임 빈도</button>
+      </div>
+
+      <div class="card" style="padding: 20px; background: #1F2937; height: 300px;">
+        <canvas id="weeklyChart" width="400" height="280" style="width: 100%;"></canvas>
+      </div>
+    </div>
+
+    <!-- 누적 위험 알림 -->
+    <div class="section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div class="section-title" style="margin-bottom: 0;">누적 위험 알림</div>
+        <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">최신순 ▼</button>
+      </div>
+
+      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEE2E2; margin-bottom: 12px;">
+        <div style="font-size: 24px;">🚨</div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; margin-bottom: 4px;">장시간 근거리 작업 감지</div>
+          <div style="font-size: 13px; color: #6B7280;">오후 3:15</div>
+        </div>
+        <div style="padding: 4px 12px; background: #DC2626; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">높음</div>
+      </div>
+
+      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEF3C7; margin-bottom: 12px;">
+        <div style="font-size: 24px;">⚡</div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; margin-bottom: 4px;">눈 깜빡임 빈도 저하</div>
+          <div style="font-size: 13px; color: #6B7280;">오후 2:40</div>
+        </div>
+        <div style="padding: 4px 12px; background: #F59E0B; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">보통</div>
+      </div>
+
+      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEF3C7;">
+        <div style="font-size: 24px;">☀️</div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; margin-bottom: 4px;">과도한 블루라이트 노출</div>
+          <div style="font-size: 13px; color: #6B7280;">오전 11:50</div>
+        </div>
+        <div style="padding: 4px 12px; background: #F59E0B; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">보통</div>
+      </div>
+    </div>
+
+    <!-- 오늘의 인사이트 -->
+    <div class="section">
+      <div class="section-title">오늘의 인사이트</div>
+
+      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEE2E2; margin-bottom: 12px;">
+        <div style="font-size: 24px;">❌</div>
+        <div>
+          <div style="font-weight: 600; margin-bottom: 4px;">가장 위험했던 시간대</div>
+          <div style="font-size: 13px; color: #4B5563; line-height: 1.4;">
+            오후 2-4시 사이에 눈의 피로도가 가장 높게 측정되었습니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #D1FAE5;">
+        <div style="font-size: 24px;">👍</div>
+        <div>
+          <div style="font-weight: 600; margin-bottom: 4px;">휴식이 효과 있었던 구간</div>
+          <div style="font-size: 13px; color: #4B5563; line-height: 1.4;">
+            오전 11시의 20분 휴식이 피로도 감소에 가장 효과적이었습니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item active">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+
+  <script src="js/sensor.js"></script>
+  <script>
+    // 주간 트렌드 차트 그리기
+    function drawWeeklyChart() {
+      const canvas = document.getElementById('weeklyChart');
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // 배경 그리드
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 1;
+
+      for (let i = 0; i <= 5; i++) {
+        const y = (i / 5) * height;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // 데이터 (14일)
+      const data = [];
+      for (let i = 0; i < 14; i++) {
+        data.push(230 + i * 10 + Math.random() * 20);
+      }
+
+      // 라인 그리기
+      const max = Math.max(...data);
+      const min = Math.min(...data);
+      const range = max - min;
+
+      ctx.strokeStyle = '#F59E0B';
+      ctx.fillStyle = '#F59E0B';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+
+      data.forEach((value, index) => {
+        const x = (index / (data.length - 1)) * width;
+        const y = height - ((value - min) / range) * (height - 20);
+
+        if (index === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+
+        // 점 그리기
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        if (index === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      });
+
+      ctx.stroke();
+    }
+
+    // 통계 업데이트
+    function updateStats() {
+      const data = sensorManager.getCurrent();
+      if (!data) return;
+
+      document.getElementById('avgFatigue').textContent = data.fatigueScore + '%';
+      document.getElementById('maxPressure').textContent = data.eyePressure + ' mmHg';
+      document.getElementById('avgBlink').textContent = data.blinkRate + ' 회/분';
+    }
+
+    // 초기화
+    sensorManager.start();
+    drawWeeklyChart();
+    updateStats();
+
+    window.addEventListener('sensorUpdate', updateStats);
+  </script>
+</body>
+</html>

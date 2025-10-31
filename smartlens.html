@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스마트렌즈 - Smart Eye Health</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #1F2937; color: white; }
+    .container { background: #1F2937; }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation (Desktop) -->
+  <nav class="sidebar-nav" style="background: #1F2937;">
+    <div style="margin-bottom: 32px; padding: 12px;">
+      <h2 style="font-size: 20px; font-weight: bold; color: #3B82F6;">Smart Eye Health</h2>
+    </div>
+    <a href="index.html" class="nav-item" style="color: white;">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item" style="color: white;">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item active" style="background: #374151; color: white;">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">스마트렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item" style="color: white;">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header" style="color: white;">
+      <button style="background: none; border: none; font-size: 24px; cursor: pointer; color: white;">☰</button>
+      <h1 class="header-title" style="flex: 1; text-align: center; color: white;">대시보드</h1>
+      <button style="background: none; border: none; font-size: 24px; cursor: pointer;">🔔</button>
+    </div>
+
+    <!-- Device Status -->
+    <div class="card" style="background: #374151; margin-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+        <div style="color: white;">📡 연결됨</div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <span>🔋</span>
+          <span id="battery" style="color: #10B981; font-weight: 600;">87%</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+        <div style="color: white;">📱 펌웨어 v1.2.0</div>
+        <div style="color: #10B981; font-weight: 600;">최신 버전</div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #4B5563;">
+        <div style="color: white;">실시간 데이터</div>
+        <div style="width: 48px; height: 28px; background: #3B82F6; border-radius: 14px; position: relative; cursor: pointer;">
+          <div style="width: 24px; height: 24px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 22px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 실시간 렌즈 데이터 -->
+    <div class="section">
+      <div class="section-title" style="color: white;">실시간 렌즈 데이터</div>
+
+      <div class="card" style="background: #374151; margin-bottom: 12px;">
+        <div style="font-size: 13px; color: #9CA3AF; margin-bottom: 8px;">안구 미세 압력</div>
+        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="microPressure">15.5 mmHg</div>
+        <div style="font-size: 12px; color: #10B981;">실시간 +0.2%</div>
+      </div>
+
+      <div class="card" style="background: #374151; margin-bottom: 12px;">
+        <div style="font-size: 13px; color: #9CA3AF; margin-bottom: 8px;">마이크로 모션</div>
+        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="microMotion">0.8 mm/s</div>
+        <div style="font-size: 12px; color: #EF4444;">실시간 -1.5%</div>
+      </div>
+
+      <div class="card" style="background: #374151;">
+        <div style="font-size: 13px; color: #9CA3AF; margin-bottom: 8px;">눈 깜빡임 빈도</div>
+        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="blinkFreq">18 회/분</div>
+        <div style="font-size: 12px; color: #10B981;">지난 1분 +5.0%</div>
+      </div>
+    </div>
+
+    <!-- AI 정밀 예측 -->
+    <div class="section">
+      <div class="section-title" style="color: white;">AI 정밀 예측</div>
+      <div class="card" style="background: #374151; text-align: center; padding: 24px;">
+        <div class="gauge-container" style="margin: 0 auto; width: 180px; height: 180px;">
+          <svg class="gauge-svg" viewBox="0 0 180 180" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: 100%;">
+            <circle class="gauge-bg" cx="90" cy="90" r="80" style="stroke: #1F2937;"></circle>
+            <circle id="riskGaugeFill" class="gauge-fill" cx="90" cy="90" r="80" style="stroke: #EF4444;"></circle>
+          </svg>
+          <div class="gauge-value">
+            <div class="gauge-number" style="color: white; font-size: 36px;" id="riskScore">82</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; padding: 8px 24px; background: #EF4444; border-radius: 20px; color: white; font-weight: 600; font-size: 14px; display: inline-block;">높음</div>
+        <div style="font-size: 16px; font-weight: bold; margin-top: 16px; color: white;">현재 위험도: 높음</div>
+        <div style="font-size: 13px; color: #9CA3AF; margin-top: 8px;">주요 위험 요인은 다음과 같습니다:</div>
+      </div>
+
+      <div class="card" style="background: #374151;">
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 14px; color: white; margin-bottom: 8px;">피로도 누적</div>
+          <div style="width: 100%; height: 8px; background: #1F2937; border-radius: 4px; overflow: hidden;">
+            <div style="width: 60%; height: 100%; background: #F59E0B;"></div>
+          </div>
+          <div style="font-size: 12px; color: #9CA3AF; text-align: right; margin-top: 4px;">60%</div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 14px; color: white; margin-bottom: 8px;">자세 불균형</div>
+          <div style="width: 100%; height: 8px; background: #1F2937; border-radius: 4px; overflow: hidden;">
+            <div style="width: 25%; height: 100%; background: #3B82F6;"></div>
+          </div>
+          <div style="font-size: 12px; color: #9CA3AF; text-align: right; margin-top: 4px;">25%</div>
+        </div>
+
+        <div>
+          <div style="font-size: 14px; color: white; margin-bottom: 8px;">외부 조도</div>
+          <div style="width: 100%; height: 8px; background: #1F2937; border-radius: 4px; overflow: hidden;">
+            <div style="width: 15%; height: 100%; background: #6B7280;"></div>
+          </div>
+          <div style="font-size: 12px; color: #9CA3AF; text-align: right; margin-top: 4px;">15%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 활동 기록 -->
+    <div class="section">
+      <div class="section-title" style="color: white;">활동 기록</div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #DC2626; border-radius: 12px; margin-bottom: 12px;">
+        <div style="width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #DC2626; font-weight: bold; font-size: 18px;">!</div>
+        <div style="font-size: 16px; font-weight: bold; color: white;">주의: 높은 안압 감지</div>
+      </div>
+      <div style="font-size: 13px; color: #D1D5DB; margin-bottom: 16px; line-height: 1.4;">
+        안전한 사용을 위해 즉시 휴식 하거나 렌즈를 제조정하세요.
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-primary" style="flex: 1;">렌즈 정밀 가이드 보기</button>
+        <button class="btn btn-secondary" style="flex: 1;">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item active">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+
+  <script src="js/sensor.js"></script>
+  <script>
+    function drawRiskGauge(value) {
+      const radius = 80;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference * (1 - value / 100);
+
+      document.getElementById('riskGaugeFill').style.strokeDasharray = circumference;
+      document.getElementById('riskGaugeFill').style.strokeDashoffset = offset;
+    }
+
+    function updateData() {
+      const data = sensorManager.getCurrent();
+      const risk = sensorManager.calculateRisk();
+
+      document.getElementById('microPressure').textContent = data.eyePressure + ' mmHg';
+      document.getElementById('microMotion').textContent = data.microMotion + ' mm/s';
+      document.getElementById('blinkFreq').textContent = data.blinkRate + ' 회/분';
+      document.getElementById('riskScore').textContent = risk.score;
+
+      drawRiskGauge(risk.score);
+    }
+
+    sensorManager.start();
+    updateData();
+    window.addEventListener('sensorUpdate', updateData);
+  </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설정 - Smart Eye Health</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Sidebar Navigation (Desktop) -->
+  <nav class="sidebar-nav">
+    <div style="margin-bottom: 32px; padding: 12px;">
+      <h2 style="font-size: 20px; font-weight: bold; color: #1D4ED8;">Smart Eye Health</h2>
+    </div>
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">스마트렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item active">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-button" onclick="history.back()">←</button>
+      <h1 class="header-title">설정</h1>
+    </div>
+
+    <!-- Device Section -->
+    <div class="section">
+      <div class="card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+        <div style="width: 60px; height: 60px; background: #EDE9FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;">
+          📡
+        </div>
+        <div style="flex: 1;">
+          <div style="font-size: 16px; font-weight: bold; margin-bottom: 4px;">연동</div>
+          <div style="font-size: 13px; color: #6B7280;">My Smart Glass 연결됨</div>
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <div style="font-size: 24px;">✅</div>
+        <div style="flex: 1;">
+          <div style="font-size: 14px; font-weight: 600;">기기 캘리브레이션 완료</div>
+          <button style="background: none; border: none; color: #3B82F6; font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; margin-top: 4px;">재보정</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-secondary" style="flex: 1;">+ 새 기기 추가</button>
+        <button class="btn btn-secondary" style="flex: 1;">🔗 연결 해제</button>
+      </div>
+    </div>
+
+    <!-- Settings List -->
+    <div class="section" style="margin-bottom: 24px;">
+      <div class="card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px; cursor: pointer;">
+        <div style="width: 48px; height: 48px; background: #EDE9FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+          🛡️
+        </div>
+        <div style="flex: 1;">
+          <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">데이터 및 보안</div>
+          <div style="font-size: 13px; color: #6B7280;">데이터 수집, 익명화, 계정 관리</div>
+        </div>
+        <div style="font-size: 24px; color: #9CA3AF;">›</div>
+      </div>
+
+      <div class="card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px; cursor: pointer;">
+        <div style="width: 48px; height: 48px; background: #EDE9FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+          🔔
+        </div>
+        <div style="flex: 1;">
+          <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">알림 설정</div>
+          <div style="font-size: 13px; color: #6B7280;">조도, 깜빡임 민감도 조절</div>
+        </div>
+        <div style="font-size: 24px; color: #9CA3AF;">›</div>
+      </div>
+
+      <div class="card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px; cursor: pointer;">
+        <div style="width: 48px; height: 48px; background: #EDE9FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+          👤
+        </div>
+        <div style="flex: 1;">
+          <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">내 정보</div>
+          <div style="font-size: 13px; color: #6B7280;">나이, 성별 및 건강 정보 등기화</div>
+        </div>
+        <div style="font-size: 24px; color: #9CA3AF;">›</div>
+      </div>
+
+      <div class="card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px; cursor: pointer;">
+        <div style="width: 48px; height: 48px; background: #EDE9FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+          ❓
+        </div>
+        <div style="flex: 1;">
+          <div style="font-size: 16px; font-weight: 600;">고객센터 및 도움말</div>
+        </div>
+        <div style="font-size: 24px; color: #9CA3AF;">›</div>
+      </div>
+
+      <div class="card" style="display: flex; align-items: center; gap: 16px; cursor: pointer;">
+        <div style="width: 48px; height: 48px; background: #EDE9FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+          ℹ️
+        </div>
+        <div style="flex: 1;">
+          <div style="font-size: 16px; font-weight: 600;">정보</div>
+        </div>
+        <div style="font-size: 24px; color: #9CA3AF;">›</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; color: #9CA3AF; font-size: 13px; margin-top: 40px;">
+      App Version 1.0.0
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item active">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+</body>
+</html>

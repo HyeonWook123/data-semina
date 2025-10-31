@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Eye Health</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Sidebar Navigation (Desktop) -->
+  <nav class="sidebar-nav">
+    <div style="margin-bottom: 32px; padding: 12px;">
+      <h2 style="font-size: 20px; font-weight: bold; color: #1D4ED8;">Smart Eye Health</h2>
+    </div>
+    <a href="index.html" class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">스마트렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="location-time">
+        <span class="location-icon">📍</span>
+        <span id="currentTime">Seoul, 10:40 AM</span>
+      </div>
+    </div>
+
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode('working')">운전 모드</button>
+      <button class="mode-btn" onclick="setMode('driving')">작업 모드</button>
+    </div>
+
+    <!-- Main Gauge -->
+    <div class="card" style="text-align: center;">
+      <div class="gauge-container">
+        <svg class="gauge-svg" viewBox="0 0 240 240" preserveAspectRatio="xMidYMid meet">
+          <circle class="gauge-bg" cx="120" cy="120" r="108"></circle>
+          <circle id="gaugeFill" class="gauge-fill" cx="120" cy="120" r="108"></circle>
+        </svg>
+        <div class="gauge-value">
+          <div class="gauge-label">눈 피로도</div>
+          <div class="gauge-number" id="fatigueValue">78</div>
+        </div>
+      </div>
+      <div class="status-badge">주의</div>
+    </div>
+
+    <!-- Alert Tags -->
+    <div class="alert-tags">
+      <div class="alert-tag warning">😊 졸음 가능성↑</div>
+      <div class="alert-tag danger">☀️ 밝기 과다↑</div>
+      <div class="alert-tag warning">👁️ 깜빡임 부족↓</div>
+    </div>
+
+    <!-- Sensor Data -->
+    <div class="sensor-grid">
+      <div class="card sensor-card">
+        <div class="sensor-label">안압</div>
+        <div class="sensor-value" id="pressureValue">18</div>
+        <div class="sensor-unit">mmHg</div>
+      </div>
+      <div class="card sensor-card">
+        <div class="sensor-label">조도</div>
+        <div class="sensor-value" id="brightnessValue">800</div>
+        <div class="sensor-unit">lux</div>
+      </div>
+      <div class="card sensor-card">
+        <div class="sensor-label">깜빡임</div>
+        <div class="sensor-value" id="blinkValue">12</div>
+        <div class="sensor-unit">/min</div>
+      </div>
+    </div>
+
+    <!-- Insights -->
+    <div class="section">
+      <div class="section-title">최근 센서 요약</div>
+      <div class="card insight-card info">
+        <div class="insight-icon">🌊</div>
+        <div class="insight-content">
+          <div class="insight-title">안압 변화</div>
+          <div class="insight-text">
+            최근 4시간 평균 <span id="avgPressure">17.5</span>mmHg로 안정적입니다. 급격한 변화는 감지되지 않았습니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="card insight-card info">
+        <div class="insight-icon">💎</div>
+        <div class="insight-content">
+          <div class="insight-title">주변 밝기</div>
+          <div class="insight-text">
+            현재 조도가 <span id="currentBrightness">800</span>lux입니다. 적정 범위 내입니다.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 30분 추이 -->
+    <div class="section">
+      <div class="section-title">30분 추이</div>
+      <div class="card">
+        <div class="chart-row">
+          <div class="chart-label">피로도</div>
+          <div class="chart-badge" style="color: #FFB800;">높음</div>
+        </div>
+        <div class="mini-chart">
+          <canvas id="fatigueChart" width="400" height="40"></canvas>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">안압</div>
+          <div class="chart-badge" style="color: #3B82F6;">안정</div>
+        </div>
+        <div class="mini-chart">
+          <canvas id="pressureChart" width="400" height="40"></canvas>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">깜빡임</div>
+          <div class="chart-badge" style="color: #F59E0B;">감소</div>
+        </div>
+        <div class="mini-chart">
+          <canvas id="blinkChart" width="400" height="40"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert Button -->
+    <button class="btn btn-primary btn-full">
+      🔔 경보 시스템 활성화
+    </button>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">홈</div>
+    </a>
+    <a href="dashboard.html" class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">대시보드</div>
+    </a>
+    <a href="smartlens.html" class="nav-item">
+      <div class="nav-icon">👓</div>
+      <div class="nav-label">렌즈</div>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">설정</div>
+    </a>
+  </nav>
+
+  <script src="js/sensor.js"></script>
+  <script>
+    // 원형 게이지 그리기
+    function drawGauge(value) {
+      const radius = 108;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference * (1 - value / 100);
+
+      document.getElementById('gaugeFill').style.strokeDasharray = circumference;
+      document.getElementById('gaugeFill').style.strokeDashoffset = offset;
+    }
+
+    // 미니 차트 그리기
+    function drawMiniChart(canvasId, data, color) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const max = Math.max(...data);
+      const min = Math.min(...data);
+      const range = max - min || 1;
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+
+      data.forEach((value, index) => {
+        const x = (index / (data.length - 1)) * width;
+        const y = height - ((value - min) / range) * height;
+
+        if (index === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      });
+
+      ctx.stroke();
+    }
+
+    // 데이터 업데이트
+    function updateData() {
+      const data = sensorManager.getCurrent();
+      if (!data) return;
+
+      document.getElementById('fatigueValue').textContent = data.fatigueScore;
+      document.getElementById('pressureValue').textContent = data.eyePressure;
+      document.getElementById('brightnessValue').textContent = data.brightness;
+      document.getElementById('blinkValue').textContent = data.blinkRate;
+      document.getElementById('currentBrightness').textContent = data.brightness;
+
+      drawGauge(data.fatigueScore);
+
+      // 차트 업데이트
+      const history = sensorManager.getHistory();
+      const fatigueData = history.map(d => d.fatigueScore);
+      const pressureData = history.map(d => d.eyePressure * 10);
+      const blinkData = history.map(d => d.blinkRate * 5);
+
+      drawMiniChart('fatigueChart', fatigueData.slice(-30), '#FFB800');
+      drawMiniChart('pressureChart', pressureData.slice(-30), '#3B82F6');
+      drawMiniChart('blinkChart', blinkData.slice(-30), '#F59E0B');
+    }
+
+    // 모드 변경
+    function setMode(mode) {
+      sensorManager.setMode(mode);
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    // 시간 업데이트
+    function updateTime() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const displayHours = hours % 12 || 12;
+
+      document.getElementById('currentTime').textContent =
+        `Seoul, ${displayHours}:${minutes} ${ampm}`;
+    }
+
+    // 초기화
+    sensorManager.start();
+    updateData();
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // 센서 업데이트 리스너
+    window.addEventListener('sensorUpdate', updateData);
+  </script>
+</body>
+</html>
