@@ -38,7 +38,7 @@
     <!-- Header -->
     <div class="header" style="color: white;">
       <button style="background: none; border: none; font-size: 24px; cursor: pointer; color: white;">☰</button>
-      <h1 class="header-title" style="flex: 1; text-align: center; color: white;">대시보드</h1>
+      <h1 class="header-title" style="flex: 1; text-align: center; color: white;">스마트렌즈</h1>
       <button style="background: none; border: none; font-size: 24px; cursor: pointer;">🔔</button>
     </div>
 
@@ -69,20 +69,20 @@
 
       <div class="card" style="background: #374151; margin-bottom: 12px;">
         <div style="font-size: 13px; color: #9CA3AF; margin-bottom: 8px;">안구 미세 압력</div>
-        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="microPressure">15.5 mmHg</div>
-        <div style="font-size: 12px; color: #10B981;">실시간 +0.2%</div>
+        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="microPressure"></div>
+        <div style="font-size: 12px;" id="microPressureChange"></div>
       </div>
 
       <div class="card" style="background: #374151; margin-bottom: 12px;">
         <div style="font-size: 13px; color: #9CA3AF; margin-bottom: 8px;">마이크로 모션</div>
-        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="microMotion">0.8 mm/s</div>
-        <div style="font-size: 12px; color: #EF4444;">실시간 -1.5%</div>
+        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="microMotion"></div>
+        <div style="font-size: 12px; color: #10B981;">안정적</div>
       </div>
 
       <div class="card" style="background: #374151;">
         <div style="font-size: 13px; color: #9CA3AF; margin-bottom: 8px;">눈 깜빡임 빈도</div>
-        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="blinkFreq">18 회/분</div>
-        <div style="font-size: 12px; color: #10B981;">지난 1분 +5.0%</div>
+        <div style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 4px;" id="blinkFreq"></div>
+        <div style="font-size: 12px; color: #10B981;">안정적</div>
       </div>
     </div>
 
@@ -93,50 +93,27 @@
         <div class="gauge-container" style="margin: 0 auto; width: 180px; height: 180px;">
           <svg class="gauge-svg" viewBox="0 0 180 180" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: 100%;">
             <circle class="gauge-bg" cx="90" cy="90" r="80" style="stroke: #1F2937;"></circle>
-            <circle id="riskGaugeFill" class="gauge-fill" cx="90" cy="90" r="80" style="stroke: #EF4444;"></circle>
+            <circle id="riskGaugeFill" class="gauge-fill" cx="90" cy="90" r="80"></circle>
           </svg>
           <div class="gauge-value">
-            <div class="gauge-number" style="color: white; font-size: 36px;" id="riskScore">82</div>
+            <div class="gauge-number" style="color: white; font-size: 36px;" id="riskScore"></div>
           </div>
         </div>
-        <div style="margin-top: 16px; padding: 8px 24px; background: #EF4444; border-radius: 20px; color: white; font-weight: 600; font-size: 14px; display: inline-block;">높음</div>
-        <div style="font-size: 16px; font-weight: bold; margin-top: 16px; color: white;">현재 위험도: 높음</div>
-        <div style="font-size: 13px; color: #9CA3AF; margin-top: 8px;">주요 위험 요인은 다음과 같습니다:</div>
+        <div id="glaucomaRiskLevelBadge" style="margin-top: 16px; padding: 8px 24px; border-radius: 20px; color: white; font-weight: 600; font-size: 14px; display: inline-block;"></div>
+        <div style="font-size: 16px; font-weight: bold; margin-top: 16px; color: white;" id="glaucomaRiskTitle"></div>
+        <div style="font-size: 13px; color: #9CA3AF; margin-top: 8px;" id="glaucomaRiskDescription"></div>
       </div>
 
-      <div class="card" style="background: #374151;">
-        <div style="margin-bottom: 16px;">
-          <div style="font-size: 14px; color: white; margin-bottom: 8px;">피로도 누적</div>
-          <div style="width: 100%; height: 8px; background: #1F2937; border-radius: 4px; overflow: hidden;">
-            <div style="width: 60%; height: 100%; background: #F59E0B;"></div>
-          </div>
-          <div style="font-size: 12px; color: #9CA3AF; text-align: right; margin-top: 4px;">60%</div>
-        </div>
-
-        <div style="margin-bottom: 16px;">
-          <div style="font-size: 14px; color: white; margin-bottom: 8px;">자세 불균형</div>
-          <div style="width: 100%; height: 8px; background: #1F2937; border-radius: 4px; overflow: hidden;">
-            <div style="width: 25%; height: 100%; background: #3B82F6;"></div>
-          </div>
-          <div style="font-size: 12px; color: #9CA3AF; text-align: right; margin-top: 4px;">25%</div>
-        </div>
-
-        <div>
-          <div style="font-size: 14px; color: white; margin-bottom: 8px;">외부 조도</div>
-          <div style="width: 100%; height: 8px; background: #1F2937; border-radius: 4px; overflow: hidden;">
-            <div style="width: 15%; height: 100%; background: #6B7280;"></div>
-          </div>
-          <div style="font-size: 12px; color: #9CA3AF; text-align: right; margin-top: 4px;">15%</div>
-        </div>
+      <div class="card" style="background: #374151;" id="glaucomaFactorsCard">
+        <!-- Dynamic content will be inserted here -->
       </div>
     </div>
 
     <!-- 활동 기록 -->
     <div class="section">
       <div class="section-title" style="color: white;">활동 기록</div>
-      <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #DC2626; border-radius: 12px; margin-bottom: 12px;">
-        <div style="width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #DC2626; font-weight: bold; font-size: 18px;">!</div>
-        <div style="font-size: 16px; font-weight: bold; color: white;">주의: 높은 안압 감지</div>
+      <div id="glaucomaActivityLog">
+        <!-- Dynamic content will be inserted here -->
       </div>
       <div style="font-size: 13px; color: #D1D5DB; margin-bottom: 16px; line-height: 1.4;">
         안전한 사용을 위해 즉시 휴식 하거나 렌즈를 제조정하세요.
@@ -170,30 +147,119 @@
 
   <script src="js/sensor.js"></script>
   <script>
-    function drawRiskGauge(value) {
+    // 녹내장 위험 레벨에 따른 색상 및 텍스트 매핑 (smartlens.html에서 가져옴)
+    function getGlaucomaRiskLevelInfo(level) {
+      switch (level) {
+        case 'HIGH':
+          return { text: '높음', bgColor: '#EF4444', textColor: 'white', chartColor: '#EF4444' };
+        case 'MEDIUM':
+          return { text: '중간', bgColor: '#F59E0B', textColor: 'white', chartColor: '#F59E0B' };
+        case 'LOW':
+          return { text: '낮음', bgColor: '#10B981', textColor: 'white', chartColor: '#10B981' };
+        default:
+          return { text: '알 수 없음', bgColor: '#6B7280', textColor: 'white', chartColor: '#EF4444' };
+      }
+    }
+
+    function drawRiskGauge(value, color) {
       const radius = 80;
       const circumference = 2 * Math.PI * radius;
       const offset = circumference * (1 - value / 100);
 
       document.getElementById('riskGaugeFill').style.strokeDasharray = circumference;
       document.getElementById('riskGaugeFill').style.strokeDashoffset = offset;
+      document.getElementById('riskGaugeFill').style.stroke = color;
     }
 
     function updateData() {
       const data = sensorManager.getCurrent();
-      const risk = sensorManager.calculateRisk();
+      if (!data || !data.glaucomaAnalysis) return;
 
-      document.getElementById('microPressure').textContent = data.eyePressure + ' mmHg';
-      document.getElementById('microMotion').textContent = data.microMotion + ' mm/s';
-      document.getElementById('blinkFreq').textContent = data.blinkRate + ' 회/분';
-      document.getElementById('riskScore').textContent = risk.score;
+      // --- 실시간 렌즈 데이터 업데이트 ---
+      document.getElementById('microPressure').textContent = `${data.eyePressure} mmHg`;
+      document.getElementById('microMotion').textContent = `${data.microMotion} mm/s`;
+      document.getElementById('blinkFreq').textContent = `${data.blinkRate} 회/분`;
 
-      drawRiskGauge(risk.score);
+      // 안구 미세 압력 변화 (녹내장 요인 기반)
+      const intraocularPressureFactor = data.glaucomaAnalysis.factors.find(f => f.name === 'intraocularPressure');
+      const microPressureChangeElement = document.getElementById('microPressureChange');
+      if (intraocularPressureFactor) {
+        microPressureChangeElement.textContent = intraocularPressureFactor.impact === 'increase' ? '위험 증가' : '위험 감소';
+        microPressureChangeElement.style.color = intraocularPressureFactor.impact === 'increase' ? '#EF4444' : '#10B981';
+      } else {
+        microPressureChangeElement.textContent = '정보 없음';
+        microPressureChangeElement.style.color = '#9CA3AF';
+      }
+
+      // --- AI 정밀 예측 업데이트 ---
+      const glaucomaProbability = data.glaucomaAnalysis.probability;
+      const glaucomaLevel = data.glaucomaAnalysis.level;
+      const glaucomaLevelInfo = getGlaucomaRiskLevelInfo(glaucomaLevel);
+
+      document.getElementById('riskScore').textContent = Math.round(glaucomaProbability * 100);
+      drawRiskGauge(glaucomaProbability * 100, glaucomaLevelInfo.chartColor);
+
+      const riskLevelBadge = document.getElementById('glaucomaRiskLevelBadge');
+      riskLevelBadge.textContent = glaucomaLevelInfo.text;
+      riskLevelBadge.style.backgroundColor = glaucomaLevelInfo.bgColor;
+      riskLevelBadge.style.color = glaucomaLevelInfo.textColor;
+
+      document.getElementById('glaucomaRiskTitle').textContent = `현재 위험도: ${glaucomaLevelInfo.text}`;
+      document.getElementById('glaucomaRiskDescription').textContent = data.glaucomaAnalysis.recommendations[0] || '주요 위험 요인은 다음과 같습니다:';
+
+      // --- 녹내장 요인 카드 업데이트 ---
+      const glaucomaFactorsCard = document.getElementById('glaucomaFactorsCard');
+      glaucomaFactorsCard.innerHTML = '';
+
+      const totalAbsoluteCoefficient = data.glaucomaAnalysis.factors.reduce(
+        (sum, factor) => sum + Math.abs(factor.coefficient || 0),
+        0
+      );
+
+      data.glaucomaAnalysis.factors.sort((a, b) => Math.abs(b.coefficient || 0) - Math.abs(a.coefficient || 0)).forEach(factor => {
+        const percentage = totalAbsoluteCoefficient > 0 ? (Math.abs(factor.coefficient || 0) / totalAbsoluteCoefficient) * 100 : 0;
+        let color = '#6B7280'; // Default color
+        if (factor.impact === 'increase') color = '#EF4444'; // Red for increasing risk
+        else if (factor.impact === 'decrease') color = '#10B981'; // Green for decreasing risk
+
+        const factorDiv = document.createElement('div');
+        factorDiv.style.marginBottom = '16px';
+        factorDiv.innerHTML = `
+          <div style="font-size: 14px; color: white; margin-bottom: 8px;">${factor.description}</div>
+          <div style="width: 100%; height: 8px; background: #1F2937; border-radius: 4px; overflow: hidden;">
+            <div style="width: ${percentage}%; height: 100%; background: ${color}; border-radius: 4px;"></div>
+          </div>
+          <div style="font-size: 12px; color: #9CA3AF; text-align: right; margin-top: 4px;">${percentage.toFixed(1)}%</div>
+        `;
+        glaucomaFactorsCard.appendChild(factorDiv);
+      });
+
+      // --- 활동 기록 업데이트 ---
+      const glaucomaActivityLog = document.getElementById('glaucomaActivityLog');
+      glaucomaActivityLog.innerHTML = '';
+
+      data.glaucomaAnalysis.recommendations.forEach(rec => {
+        const alertBanner = document.createElement('div');
+        alertBanner.className = 'alert-banner';
+        alertBanner.style.display = 'flex';
+        alertBanner.style.alignItems = 'center';
+        alertBanner.style.gap = '12px';
+        alertBanner.style.padding = '16px';
+        alertBanner.style.backgroundColor = glaucomaLevelInfo.bgColor;
+        alertBanner.style.borderRadius = '12px';
+        alertBanner.style.marginBottom = '12px';
+        alertBanner.innerHTML = `
+          <div style="width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: ${glaucomaLevelInfo.bgColor}; font-weight: bold; font-size: 18px;">!</div>
+          <div style="font-size: 16px; font-weight: bold; color: white;">${rec}</div>
+        `;
+        glaucomaActivityLog.appendChild(alertBanner);
+      });
     }
 
+    // 초기화
     sensorManager.start();
     updateData();
-    window.addEventListener('sensorUpdate', updateData);
+    // window.addEventListener('sensorUpdate', updateData); // 정적 데이터이므로 필요 없음
   </script>
 </body>
 </html>

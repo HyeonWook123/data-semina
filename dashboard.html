@@ -41,19 +41,19 @@
     <div class="stats-grid">
       <div class="card stat-card">
         <div class="stat-label">평균 피로도</div>
-        <div class="stat-value" style="color: #F59E0B;" id="avgFatigue">75%</div>
+        <div class="stat-value" id="avgFatigue"></div>
       </div>
       <div class="card stat-card">
         <div class="stat-label">최대 안압</div>
-        <div class="stat-value" id="maxPressure">18 mmHg</div>
+        <div class="stat-value" id="maxPressure"></div>
       </div>
       <div class="card stat-card">
         <div class="stat-label">평균 깜빡임</div>
-        <div class="stat-value" id="avgBlink">15 회/분</div>
+        <div class="stat-value" id="avgBlink"></div>
       </div>
       <div class="card stat-card">
         <div class="stat-label">경보 횟수</div>
-        <div class="stat-value" style="color: #EF4444;" id="alertCount">0 회</div>
+        <div class="stat-value" style="color: #EF4444;" id="alertCount"></div>
       </div>
     </div>
 
@@ -78,31 +78,8 @@
         <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">최신순 ▼</button>
       </div>
 
-      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEE2E2; margin-bottom: 12px;">
-        <div style="font-size: 24px;">🚨</div>
-        <div style="flex: 1;">
-          <div style="font-weight: 600; margin-bottom: 4px;">장시간 근거리 작업 감지</div>
-          <div style="font-size: 13px; color: #6B7280;">오후 3:15</div>
-        </div>
-        <div style="padding: 4px 12px; background: #DC2626; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">높음</div>
-      </div>
-
-      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEF3C7; margin-bottom: 12px;">
-        <div style="font-size: 24px;">⚡</div>
-        <div style="flex: 1;">
-          <div style="font-weight: 600; margin-bottom: 4px;">눈 깜빡임 빈도 저하</div>
-          <div style="font-size: 13px; color: #6B7280;">오후 2:40</div>
-        </div>
-        <div style="padding: 4px 12px; background: #F59E0B; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">보통</div>
-      </div>
-
-      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEF3C7;">
-        <div style="font-size: 24px;">☀️</div>
-        <div style="flex: 1;">
-          <div style="font-weight: 600; margin-bottom: 4px;">과도한 블루라이트 노출</div>
-          <div style="font-size: 13px; color: #6B7280;">오전 11:50</div>
-        </div>
-        <div style="padding: 4px 12px; background: #F59E0B; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">보통</div>
+      <div id="cumulativeAlerts">
+        <!-- Dynamic content will be inserted here -->
       </div>
     </div>
 
@@ -110,24 +87,8 @@
     <div class="section">
       <div class="section-title">오늘의 인사이트</div>
 
-      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #FEE2E2; margin-bottom: 12px;">
-        <div style="font-size: 24px;">❌</div>
-        <div>
-          <div style="font-weight: 600; margin-bottom: 4px;">가장 위험했던 시간대</div>
-          <div style="font-size: 13px; color: #4B5563; line-height: 1.4;">
-            오후 2-4시 사이에 눈의 피로도가 가장 높게 측정되었습니다.
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="display: flex; gap: 12px; padding: 16px; background: #D1FAE5;">
-        <div style="font-size: 24px;">👍</div>
-        <div>
-          <div style="font-weight: 600; margin-bottom: 4px;">휴식이 효과 있었던 구간</div>
-          <div style="font-size: 13px; color: #4B5563; line-height: 1.4;">
-            오전 11시의 20분 휴식이 피로도 감소에 가장 효과적이었습니다.
-          </div>
-        </div>
+      <div id="todayInsights">
+        <!-- Dynamic content will be inserted here -->
       </div>
     </div>
   </div>
@@ -154,12 +115,44 @@
 
   <script src="js/sensor.js"></script>
   <script>
+    // 피로도 레벨에 따른 색상 및 텍스트 매핑 (index.html에서 가져옴)
+    function getFatigueLevelInfo(level) {
+      switch (level) {
+        case 'Red':
+          return { text: '매우 피곤', bgColor: '#FEE2E2', textColor: '#991B1B', chartColor: '#EF4444' };
+        case 'Orange':
+          return { text: '피곤', bgColor: '#FEF3C7', textColor: '#92400E', chartColor: '#F59E0B' };
+        case 'Yellow':
+          return { text: '보통', bgColor: '#FFFBEB', textColor: '#B45309', chartColor: '#FFD700' };
+        case 'Green':
+          return { text: '양호', bgColor: '#D1FAE5', textColor: '#065F46', chartColor: '#10B981' };
+        default:
+          return { text: '알 수 없음', bgColor: '#F9FAFB', textColor: '#1F2937', chartColor: '#FFB800' };
+      }
+    }
+
+    // 녹내장 위험 레벨에 따른 색상 및 텍스트 매핑 (smartlens.html에서 가져옴)
+    function getGlaucomaRiskLevelInfo(level) {
+      switch (level) {
+        case 'HIGH':
+          return { text: '높음', bgColor: '#FEE2E2', textColor: '#991B1B', chartColor: '#EF4444' };
+        case 'MEDIUM':
+          return { text: '중간', bgColor: '#FEF3C7', textColor: '#92400E', chartColor: '#F59E0B' };
+        case 'LOW':
+          return { text: '낮음', bgColor: '#D1FAE5', textColor: '#065F46', chartColor: '#10B981' };
+        default:
+          return { text: '알 수 없음', bgColor: '#F9FAFB', textColor: '#1F2937', chartColor: '#EF4444' };
+      }
+    }
+
     // 주간 트렌드 차트 그리기
-    function drawWeeklyChart() {
+    function drawWeeklyChart(dataPoints, color) {
       const canvas = document.getElementById('weeklyChart');
       const ctx = canvas.getContext('2d');
       const width = canvas.width;
       const height = canvas.height;
+
+      ctx.clearRect(0, 0, width, height); // 기존 차트 지우기
 
       // 배경 그리드
       ctx.strokeStyle = '#374151';
@@ -173,25 +166,23 @@
         ctx.stroke();
       }
 
-      // 데이터 (14일)
-      const data = [];
-      for (let i = 0; i < 14; i++) {
-        data.push(230 + i * 10 + Math.random() * 20);
-      }
+      // 데이터가 없으면 그리지 않음
+      if (dataPoints.length === 0) return;
 
       // 라인 그리기
-      const max = Math.max(...data);
-      const min = Math.min(...data);
-      const range = max - min;
+      const values = dataPoints.map(d => d.value);
+      const max = Math.max(...values);
+      const min = Math.min(...values);
+      const range = max - min || 1;
 
-      ctx.strokeStyle = '#F59E0B';
-      ctx.fillStyle = '#F59E0B';
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
       ctx.lineWidth = 3;
       ctx.beginPath();
 
-      data.forEach((value, index) => {
-        const x = (index / (data.length - 1)) * width;
-        const y = height - ((value - min) / range) * (height - 20);
+      dataPoints.forEach((point, index) => {
+        const x = (index / (dataPoints.length - 1)) * width;
+        const y = height - ((point.value - min) / range) * (height - 20); // 상단 여백 20px
 
         if (index === 0) {
           ctx.moveTo(x, y);
@@ -216,22 +207,128 @@
       ctx.stroke();
     }
 
-    // 통계 업데이트
-    function updateStats() {
+    // 통계 및 인사이트 업데이트
+    function updateDashboard() {
       const data = sensorManager.getCurrent();
-      if (!data) return;
+      if (!data || !data.fatigueAnalysis || !data.glaucomaAnalysis) return;
 
-      document.getElementById('avgFatigue').textContent = data.fatigueScore + '%';
-      document.getElementById('maxPressure').textContent = data.eyePressure + ' mmHg';
-      document.getElementById('avgBlink').textContent = data.blinkRate + ' 회/분';
+      // --- Stats Grid 업데이트 ---
+      const fatigueLevelInfo = getFatigueLevelInfo(data.fatigueAnalysis.level);
+      document.getElementById('avgFatigue').textContent = `${data.fatigueAnalysis.score}%`;
+      document.getElementById('avgFatigue').style.color = fatigueLevelInfo.chartColor;
+
+      const glaucomaLevelInfo = getGlaucomaRiskLevelInfo(data.glaucomaAnalysis.level);
+      document.getElementById('maxPressure').textContent = `${data.eyePressure} mmHg`;
+      document.getElementById('maxPressure').style.color = glaucomaLevelInfo.chartColor;
+
+      document.getElementById('avgBlink').textContent = `${data.blinkRate} 회/분`;
+      document.getElementById('avgBlink').style.color = '#1F2937'; // 고정
+
+      // 경보 횟수는 현재 정적 데이터에서 직접 가져올 수 없으므로 임시 값 사용
+      document.getElementById('alertCount').textContent = `3 회`; // 예시 값
+
+      // --- 주간 트렌드 차트 업데이트 ---
+      // 여기서는 sensorHistory를 활용하여 실제 데이터에 가까운 트렌드를 만듭니다.
+      // 실제 주간 데이터가 있다면 해당 데이터를 사용해야 합니다.
+      const weeklyFatigueData = sensorManager.getHistory().slice(-14).map((d, i) => ({ day: `Day ${i + 1}`, value: d.fatigueScore }));
+      drawWeeklyChart(weeklyFatigueData, fatigueLevelInfo.chartColor);
+
+      // --- 누적 위험 알림 업데이트 ---
+      const cumulativeAlertsContainer = document.getElementById('cumulativeAlerts');
+      cumulativeAlertsContainer.innerHTML = '';
+
+      // 피로도 권장 사항을 알림으로 표시
+      data.fatigueAnalysis.recommendations.forEach(rec => {
+        const alertCard = document.createElement('div');
+        alertCard.className = 'card';
+        alertCard.style.display = 'flex';
+        alertCard.style.gap = '12px';
+        alertCard.style.padding = '16px';
+        alertCard.style.marginBottom = '12px';
+        alertCard.style.backgroundColor = fatigueLevelInfo.bgColor;
+        alertCard.innerHTML = `
+          <div style="font-size: 24px;">⚡</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">피로도 관련 알림</div>
+            <div style="font-size: 13px; color: #6B7280;">${rec}</div>
+          </div>
+          <div style="padding: 4px 12px; background: ${fatigueLevelInfo.chartColor}; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">${fatigueLevelInfo.text}</div>
+        `;
+        cumulativeAlertsContainer.appendChild(alertCard);
+      });
+
+      // 녹내장 권장 사항을 알림으로 표시
+      data.glaucomaAnalysis.recommendations.forEach(rec => {
+        const alertCard = document.createElement('div');
+        alertCard.className = 'card';
+        alertCard.style.display = 'flex';
+        alertCard.style.gap = '12px';
+        alertCard.style.padding = '16px';
+        alertCard.style.marginBottom = '12px';
+        alertCard.style.backgroundColor = glaucomaLevelInfo.bgColor;
+        alertCard.innerHTML = `
+          <div style="font-size: 24px;">🚨</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">녹내장 위험 알림</div>
+            <div style="font-size: 13px; color: #6B7280;">${rec}</div>
+          </div>
+          <div style="padding: 4px 12px; background: ${glaucomaLevelInfo.chartColor}; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; height: fit-content;">${glaucomaLevelInfo.text}</div>
+        `;
+        cumulativeAlertsContainer.appendChild(alertCard);
+      });
+
+      // --- 오늘의 인사이트 업데이트 ---
+      const todayInsightsContainer = document.getElementById('todayInsights');
+      todayInsightsContainer.innerHTML = '';
+
+      // 피로도 인사이트
+      data.fatigueAnalysis.factors.forEach(factor => {
+        const insightCard = document.createElement('div');
+        insightCard.className = 'card';
+        insightCard.style.display = 'flex';
+        insightCard.style.gap = '12px';
+        insightCard.style.padding = '16px';
+        insightCard.style.marginBottom = '12px';
+        insightCard.style.backgroundColor = factor.impact === 'increase' ? '#FEE2E2' : '#D1FAE5';
+        insightCard.innerHTML = `
+          <div style="font-size: 24px;">${factor.impact === 'increase' ? '❌' : '👍'}</div>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px;">${factor.description}</div>
+            <div style="font-size: 13px; color: #4B5563; line-height: 1.4;">
+              ${factor.impact === 'increase' ? '현재 ' + factor.description + '으로 인해 피로도가 증가하고 있습니다.' : '현재 ' + factor.description + '은(는) 피로도 감소에 긍정적인 영향을 미치고 있습니다.'}
+            </div>
+          </div>
+        `;
+        todayInsightsContainer.appendChild(insightCard);
+      });
+
+      // 녹내장 인사이트
+      data.glaucomaAnalysis.factors.forEach(factor => {
+        const insightCard = document.createElement('div');
+        insightCard.className = 'card';
+        insightCard.style.display = 'flex';
+        insightCard.style.gap = '12px';
+        insightCard.style.padding = '16px';
+        insightCard.style.marginBottom = '12px';
+        insightCard.style.backgroundColor = factor.impact === 'increase' ? '#FEE2E2' : '#D1FAE5';
+        insightCard.innerHTML = `
+          <div style="font-size: 24px;">${factor.impact === 'increase' ? '🚨' : '✅'}</div>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px;">${factor.description}</div>
+            <div style="font-size: 13px; color: #4B5563; line-height: 1.4;">
+              ${factor.impact === 'increase' ? '현재 ' + factor.description + '으로 인해 녹내장 위험이 증가하고 있습니다.' : '현재 ' + factor.description + '은(는) 녹내장 위험 감소에 긍정적인 영향을 미치고 있습니다.'}
+            </div>
+          </div>
+        `;
+        todayInsightsContainer.appendChild(insightCard);
+      });
     }
 
     // 초기화
     sensorManager.start();
-    drawWeeklyChart();
-    updateStats();
+    updateDashboard();
 
-    window.addEventListener('sensorUpdate', updateStats);
+    // window.addEventListener('sensorUpdate', updateDashboard); // 정적 데이터이므로 필요 없음
   </script>
 </body>
 </html>

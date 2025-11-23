@@ -54,34 +54,32 @@
         </svg>
         <div class="gauge-value">
           <div class="gauge-label">눈 피로도</div>
-          <div class="gauge-number" id="fatigueValue">78</div>
+          <div class="gauge-number" id="fatigueValue"></div>
         </div>
       </div>
-      <div class="status-badge">주의</div>
+      <div class="status-badge" id="fatigueStatusBadge"></div>
     </div>
 
     <!-- Alert Tags -->
-    <div class="alert-tags">
-      <div class="alert-tag warning">😊 졸음 가능성↑</div>
-      <div class="alert-tag danger">☀️ 밝기 과다↑</div>
-      <div class="alert-tag warning">👁️ 깜빡임 부족↓</div>
+    <div class="alert-tags" id="fatigueAlertTags">
+      <!-- Dynamic content will be inserted here -->
     </div>
 
     <!-- Sensor Data -->
     <div class="sensor-grid">
       <div class="card sensor-card">
         <div class="sensor-label">안압</div>
-        <div class="sensor-value" id="pressureValue">18</div>
+        <div class="sensor-value" id="pressureValue"></div>
         <div class="sensor-unit">mmHg</div>
       </div>
       <div class="card sensor-card">
         <div class="sensor-label">조도</div>
-        <div class="sensor-value" id="brightnessValue">800</div>
+        <div class="sensor-value" id="brightnessValue"></div>
         <div class="sensor-unit">lux</div>
       </div>
       <div class="card sensor-card">
         <div class="sensor-label">깜빡임</div>
-        <div class="sensor-value" id="blinkValue">12</div>
+        <div class="sensor-value" id="blinkValue"></div>
         <div class="sensor-unit">/min</div>
       </div>
     </div>
@@ -89,24 +87,8 @@
     <!-- Insights -->
     <div class="section">
       <div class="section-title">최근 센서 요약</div>
-      <div class="card insight-card info">
-        <div class="insight-icon">🌊</div>
-        <div class="insight-content">
-          <div class="insight-title">안압 변화</div>
-          <div class="insight-text">
-            최근 4시간 평균 <span id="avgPressure">17.5</span>mmHg로 안정적입니다. 급격한 변화는 감지되지 않았습니다.
-          </div>
-        </div>
-      </div>
-
-      <div class="card insight-card info">
-        <div class="insight-icon">💎</div>
-        <div class="insight-content">
-          <div class="insight-title">주변 밝기</div>
-          <div class="insight-text">
-            현재 조도가 <span id="currentBrightness">800</span>lux입니다. 적정 범위 내입니다.
-          </div>
-        </div>
+      <div id="fatigueInsights">
+        <!-- Dynamic content will be inserted here -->
       </div>
     </div>
 
@@ -116,7 +98,7 @@
       <div class="card">
         <div class="chart-row">
           <div class="chart-label">피로도</div>
-          <div class="chart-badge" style="color: #FFB800;">높음</div>
+          <div class="chart-badge" id="fatigueChartBadge"></div>
         </div>
         <div class="mini-chart">
           <canvas id="fatigueChart" width="400" height="40"></canvas>
@@ -168,14 +150,31 @@
 
   <script src="js/sensor.js"></script>
   <script>
+    // 피로도 레벨에 따른 색상 및 텍스트 매핑
+    function getFatigueLevelInfo(level) {
+      switch (level) {
+        case 'Red':
+          return { text: '매우 피곤', bgColor: '#FEE2E2', textColor: '#991B1B', chartColor: '#EF4444' };
+        case 'Orange':
+          return { text: '피곤', bgColor: '#FEF3C7', textColor: '#92400E', chartColor: '#F59E0B' };
+        case 'Yellow':
+          return { text: '보통', bgColor: '#FFFBEB', textColor: '#B45309', chartColor: '#FFD700' };
+        case 'Green':
+          return { text: '양호', bgColor: '#D1FAE5', textColor: '#065F46', chartColor: '#10B981' };
+        default:
+          return { text: '알 수 없음', bgColor: '#F9FAFB', textColor: '#1F2937', chartColor: '#FFB800' };
+      }
+    }
+
     // 원형 게이지 그리기
-    function drawGauge(value) {
+    function drawGauge(value, color) {
       const radius = 108;
       const circumference = 2 * Math.PI * radius;
       const offset = circumference * (1 - value / 100);
 
       document.getElementById('gaugeFill').style.strokeDasharray = circumference;
       document.getElementById('gaugeFill').style.strokeDashoffset = offset;
+      document.getElementById('gaugeFill').style.stroke = color;
     }
 
     // 미니 차트 그리기
@@ -212,15 +211,62 @@
     // 데이터 업데이트
     function updateData() {
       const data = sensorManager.getCurrent();
-      if (!data) return;
+      if (!data || !data.fatigueAnalysis) return;
 
-      document.getElementById('fatigueValue').textContent = data.fatigueScore;
+      // 피로도 분석 결과
+      const fatigueScore = data.fatigueAnalysis.score;
+      const fatigueLevel = data.fatigueAnalysis.level;
+      const fatigueLevelInfo = getFatigueLevelInfo(fatigueLevel);
+
+      document.getElementById('fatigueValue').textContent = fatigueScore;
+      drawGauge(fatigueScore, fatigueLevelInfo.chartColor);
+
+      const statusBadge = document.getElementById('fatigueStatusBadge');
+      statusBadge.textContent = fatigueLevelInfo.text;
+      statusBadge.style.backgroundColor = fatigueLevelInfo.bgColor;
+      statusBadge.style.color = fatigueLevelInfo.textColor;
+
+      // Alert Tags 업데이트
+      const alertTagsContainer = document.getElementById('fatigueAlertTags');
+      alertTagsContainer.innerHTML = ''; // 기존 내용 지우기
+      data.fatigueAnalysis.factors.forEach(factor => {
+        const tag = document.createElement('div');
+        tag.className = 'alert-tag';
+        let icon = '';
+        let bgColor = '#E0F2FE'; // Default info color
+        if (factor.impact === 'increase') {
+          bgColor = '#FEE2E2'; // Danger
+          icon = '⚠️';
+        } else if (factor.impact === 'decrease') {
+          bgColor = '#D1FAE5'; // Success
+          icon = '✅';
+        }
+        tag.style.backgroundColor = bgColor;
+        tag.innerHTML = `${icon} ${factor.description}${factor.impact === 'increase' ? '↑' : factor.impact === 'decrease' ? '↓' : ''}`;
+        alertTagsContainer.appendChild(tag);
+      });
+
+      // 센서 데이터 (고정 값)
       document.getElementById('pressureValue').textContent = data.eyePressure;
       document.getElementById('brightnessValue').textContent = data.brightness;
       document.getElementById('blinkValue').textContent = data.blinkRate;
-      document.getElementById('currentBrightness').textContent = data.brightness;
+      document.getElementById('currentBrightness').textContent = data.brightness; // 인사이트용
 
-      drawGauge(data.fatigueScore);
+      // 인사이트 업데이트
+      const insightsContainer = document.getElementById('fatigueInsights');
+      insightsContainer.innerHTML = '';
+      data.fatigueAnalysis.recommendations.forEach(rec => {
+        const insightCard = document.createElement('div');
+        insightCard.className = 'card insight-card info';
+        insightCard.innerHTML = `
+          <div class="insight-icon">💡</div>
+          <div class="insight-content">
+            <div class="insight-title">권장 사항</div>
+            <div class="insight-text">${rec}</div>
+          </div>
+        `;
+        insightsContainer.appendChild(insightCard);
+      });
 
       // 차트 업데이트
       const history = sensorManager.getHistory();
@@ -228,12 +274,14 @@
       const pressureData = history.map(d => d.eyePressure * 10);
       const blinkData = history.map(d => d.blinkRate * 5);
 
-      drawMiniChart('fatigueChart', fatigueData.slice(-30), '#FFB800');
+      document.getElementById('fatigueChartBadge').textContent = fatigueLevelInfo.text;
+      document.getElementById('fatigueChartBadge').style.color = fatigueLevelInfo.chartColor;
+      drawMiniChart('fatigueChart', fatigueData.slice(-30), fatigueLevelInfo.chartColor);
       drawMiniChart('pressureChart', pressureData.slice(-30), '#3B82F6');
       drawMiniChart('blinkChart', blinkData.slice(-30), '#F59E0B');
     }
 
-    // 모드 변경
+    // 모드 변경 (기존 로직 유지)
     function setMode(mode) {
       sensorManager.setMode(mode);
       document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -242,7 +290,7 @@
       event.target.classList.add('active');
     }
 
-    // 시간 업데이트
+    // 시간 업데이트 (기존 로직 유지)
     function updateTime() {
       const now = new Date();
       const hours = now.getHours();
@@ -258,10 +306,10 @@
     sensorManager.start();
     updateData();
     updateTime();
-    setInterval(updateTime, 1000);
+    // setInterval(updateTime, 1000); // 정적 데이터이므로 실시간 업데이트는 필요 없음
 
-    // 센서 업데이트 리스너
-    window.addEventListener('sensorUpdate', updateData);
+    // 센서 업데이트 리스너 (정적 데이터이므로 한 번만 호출)
+    // window.addEventListener('sensorUpdate', updateData);
   </script>
 </body>
 </html>
